@@ -1,4 +1,4 @@
-# NextJS template
+# 
 
 ## Getting Started
 
