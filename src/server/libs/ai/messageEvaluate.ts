@@ -1,5 +1,3 @@
-import MessageEvaluateRequestData from '../../interfaces/message/evaluate/POST/Request';
-import MessageEvaluateResponseData from '../../interfaces/message/evaluate/POST/Response';
 import { generateText } from './generateText';
 
 const prompt =
