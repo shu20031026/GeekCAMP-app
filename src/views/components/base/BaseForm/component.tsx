@@ -5,7 +5,7 @@ const baseStyle = `w-full h-full min-h-7 p-0`;
 
 export type BaseFormProps = {
   id?: string;
-  className: string;
+  className?: string;
   value?: string;
   defaultValue?: string;
   onChange?: (text: string) => void;

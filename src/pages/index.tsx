@@ -1,2 +1,2 @@
-import Page from '@/views/components/pages';
-export default Page;
+import RootPage from '~/src/views/components/pages/index';
+export default RootPage;
