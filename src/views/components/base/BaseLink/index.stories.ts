@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
 import BaseLink from '.';
 
 const meta: Meta<typeof BaseLink> = {
