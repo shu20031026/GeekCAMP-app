@@ -7,12 +7,9 @@ import MessageTranslateRequestData from '~/src/server/interfaces/message/transla
 import MessageTranslateResponseData from '~/src/server/interfaces/message/translate/POST/Response';
 import { FaLongArrowAltDown, FaCheck } from 'react-icons/fa';
 import { HiSelector } from 'react-icons/hi';
-import BaseButton from '../../base/BaseButton';
-import BaseForm from '../../base/BaseForm';
 import { GenerateButton } from '../../domain/GenerateButton/template';
 import MessageForm from '../../domain/MessageForm';
 import { BaseTemplate } from '../../template/BaseTemplate';
-import { ModeChangeButton } from '../../domain/ModeChangeButton/template';
 import { Listbox } from '@headlessui/react';
 import clsx from 'clsx';
 
@@ -62,9 +59,7 @@ export const RootPage: NextPage = () => {
     <BaseTemplate>
       <Listbox value={currentMode} onChange={setCurrentMode}>
         <Listbox.Button className='flex bg-red-400 text-white w-fit px-[32px] justify-center items-center'>
-          <BaseButton type='button' className='font-bold text-[24px]'>
-            モードを変更する
-          </BaseButton>
+          <div className='font-bold text-[24px]'>モードを変更する</div>
           <HiSelector className='w-[32px] h-[32px]' />
         </Listbox.Button>
         <Listbox.Options className='absolute w-fit bg-white m-[4px] p-[8px] rounded-[8px]'>
