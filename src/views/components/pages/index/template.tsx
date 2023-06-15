@@ -107,7 +107,7 @@ export const RootPage: NextPage = () => {
           <FaLongArrowAltDown className='w-[24px] h-[24px] text-red-500' />
           {isGeneratingMessage && <p>loading...</p>}
           {!isGeneratingMessage && generatedMessage ? (
-            <p>{generatedMessage.message}</p>
+            <p className='border-2 border-gray-300 bg-white'>{generatedMessage.message}</p>
           ) : (
             <p>この文章を?%くらいフォーマルにすると?</p>
           )}
