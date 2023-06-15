@@ -89,7 +89,7 @@ export const RootPage: NextPage = () => {
             評価
           </GenerateButton>
           <FaLongArrowAltDown className='w-[24px] h-[24px] text-red-500' />
-          {isEvaluatingMessage && <p>lording...</p>}
+          {isEvaluatingMessage && <p>loading...</p>}
           {!isEvaluatingMessage && evaluateValue ? (
             <p>この文章のフォーマル度は{evaluateValue.casualValue}です</p>
           ) : (
@@ -105,7 +105,7 @@ export const RootPage: NextPage = () => {
             生成
           </GenerateButton>
           <FaLongArrowAltDown className='w-[24px] h-[24px] text-red-500' />
-          {isGeneratingMessage && <p>lording...</p>}
+          {isGeneratingMessage && <p>loading...</p>}
           {!isGeneratingMessage && generatedMessage ? (
             <p>{generatedMessage.message}</p>
           ) : (
