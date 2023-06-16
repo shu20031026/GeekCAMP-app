@@ -12,6 +12,10 @@ import { Mode, ModeSelect } from '../../template/ModeSelect';
 import { BaseTextarea } from '../../base/BaseTextarea';
 import * as Slider from '@radix-ui/react-slider';
 import BaseForm from '../../base/BaseForm';
+import { CopyButton } from '../../domain/CopyButton';
+import { copyText } from '../../utils/copyText';
+import * as Popover from '@radix-ui/react-popover';
+import { PopupButton } from '../../template/PopupButton';
 
 const modeList: Mode[] = ['evaluate', 'translate'];
 
@@ -66,7 +70,14 @@ export const RootPage: NextPage = () => {
       {currentMode === 'evaluate' && (
         <div className='space-y-[8px] flex items-center justify-center flex-col'>
           <div>{evaluatedMessageValue}</div>
-          <BaseTextarea className='h-[160px]' onChange={(e) => setEvaluatedMessageValue(e.target.value)} />
+          <div className='w-full'>
+            <PopupButton popupMessage='copied!'>
+              <CopyButton type='button' onClick={() => copyText(evaluatedMessageValue)}>
+                copy
+              </CopyButton>
+            </PopupButton>
+            <BaseTextarea className='h-[160px]' onChange={(e) => setEvaluatedMessageValue(e.target.value)} />
+          </div>
           <GenerateButton type='button' onClick={() => messageEvaluatedHandler()}>
             評価
           </GenerateButton>
