@@ -7,7 +7,6 @@ import MessageTranslateRequestData from '~/src/server/interfaces/message/transla
 import MessageTranslateResponseData from '~/src/server/interfaces/message/translate/POST/Response';
 import { FaLongArrowAltDown } from 'react-icons/fa';
 import { GenerateButton } from '../../domain/GenerateButton/template';
-import MessageForm from '../../domain/MessageForm';
 import { BaseTemplate } from '../../template/BaseTemplate';
 import { Mode, ModeSelect } from '../../template/ModeSelect';
 import { BaseTextarea } from '../../base/BaseTextarea';
@@ -60,7 +59,7 @@ export const RootPage: NextPage = () => {
       {currentMode === 'evaluate' && (
         <div className='space-y-[8px] flex items-center justify-center flex-col'>
           <div>{evaluatedMessageValue}</div>
-          <BaseTextarea className='h-[160px]' />
+          <BaseTextarea className='h-[160px]' onChange={(e) => setEvaluatedMessageValue(e.target.value)} />
           <GenerateButton type='button' onClick={() => messageEvaluatedHandler()}>
             評価
           </GenerateButton>
@@ -76,7 +75,7 @@ export const RootPage: NextPage = () => {
       {currentMode === 'translate' && (
         <div className='space-y-[8px] flex items-center justify-center flex-col'>
           <div>{messageFormValue}</div>
-          <BaseTextarea className='h-[160px]' />
+          <BaseTextarea className='h-[160px]' onChange={(e) => setMessageFormValue(e.target.value)} />
           <GenerateButton type='button' onClick={() => messageGeneratingHandler()}>
             生成
           </GenerateButton>
