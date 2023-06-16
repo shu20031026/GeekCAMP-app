@@ -12,6 +12,7 @@ import { Mode, ModeSelect } from '../../template/ModeSelect';
 import { BaseTextarea } from '../../base/BaseTextarea';
 import * as Slider from '@radix-ui/react-slider';
 import BaseForm from '../../base/BaseForm';
+import ThreeDotsLoader from '../../domain/ThreeDotsLoader';
 
 const modeList: Mode[] = ['evaluate', 'translate'];
 
@@ -71,7 +72,7 @@ export const RootPage: NextPage = () => {
             評価
           </GenerateButton>
           <FaLongArrowAltDown className='w-[24px] h-[24px] text-red-500' />
-          {isEvaluatingMessage && <p>loading...</p>}
+          {isEvaluatingMessage && <ThreeDotsLoader />}
           {!isEvaluatingMessage && evaluateValue ? (
             <p>この文章のフォーマル度は{evaluateValue.casualValue}です</p>
           ) : (
@@ -105,7 +106,7 @@ export const RootPage: NextPage = () => {
             生成
           </GenerateButton>
           <FaLongArrowAltDown className='w-[24px] h-[24px] text-red-500' />
-          {isGeneratingMessage && <p>loading...</p>}
+          {isGeneratingMessage && <ThreeDotsLoader />}
           {!isGeneratingMessage && generatedMessage ? (
             <p className='border-2 border-gray-300 bg-white'>{generatedMessage.message}</p>
           ) : (
