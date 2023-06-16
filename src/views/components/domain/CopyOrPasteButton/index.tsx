@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import BaseButton from '../../base/BaseButton';
 import { BaseButtonProps } from '../../base/BaseButton/component';
 
-export const CopyAndPasteButton = forwardRef<HTMLButtonElement, BaseButtonProps>(
+export const CopyOrPasteButton = forwardRef<HTMLButtonElement, BaseButtonProps>(
   ({ ...rest }, forwardRef): JSX.Element => {
     return (
       <BaseButton
@@ -14,4 +14,4 @@ export const CopyAndPasteButton = forwardRef<HTMLButtonElement, BaseButtonProps>
   },
 );
 
-CopyAndPasteButton.displayName = 'CopyAndPasteButton';
+CopyOrPasteButton.displayName = 'CopyOrPasteButton';

@@ -12,7 +12,7 @@ import { Mode, ModeSelect } from '../../template/ModeSelect';
 import { BaseTextarea } from '../../base/BaseTextarea';
 import * as Slider from '@radix-ui/react-slider';
 import BaseForm from '../../base/BaseForm';
-import { CopyAndPasteButton } from '../../domain/CopyAndPasteButton';
+import { CopyOrPasteButton } from '../../domain/CopyOrPasteButton';
 import { copyText } from '../../utils/copyText';
 import { PopupButton } from '../../template/PopupButton';
 import { pasteText } from '../../utils/pasteText';
@@ -73,17 +73,21 @@ export const RootPage: NextPage = () => {
           <div className='w-full'>
             <div className='flex'>
               <PopupButton popupMessage='copied!'>
-                <CopyAndPasteButton type='button' onClick={() => copyText(evaluatedMessageValue)}>
+                <CopyOrPasteButton type='button' onClick={() => copyText(evaluatedMessageValue)}>
                   copy
-                </CopyAndPasteButton>
+                </CopyOrPasteButton>
               </PopupButton>
               <PopupButton popupMessage='pasted!'>
-                <CopyAndPasteButton type='button' onClick={() => pasteText(setEvaluatedMessageValue)}>
+                <CopyOrPasteButton type='button' onClick={() => pasteText(setEvaluatedMessageValue)}>
                   paste
-                </CopyAndPasteButton>
+                </CopyOrPasteButton>
               </PopupButton>
             </div>
-            <BaseTextarea className='h-[160px]' onChange={(e) => setEvaluatedMessageValue(e.target.value)} />
+            <BaseTextarea
+              className='h-[160px]'
+              onChange={(e) => setEvaluatedMessageValue(e.target.value)}
+              value={evaluatedMessageValue}
+            />
           </div>
           <GenerateButton type='button' onClick={() => messageEvaluatedHandler()}>
             評価
@@ -103,26 +107,35 @@ export const RootPage: NextPage = () => {
           <div className='w-full'>
             <div className='flex'>
               <PopupButton popupMessage='copied!'>
-                <CopyAndPasteButton type='button' onClick={() => copyText(evaluatedMessageValue)}>
+                <CopyOrPasteButton type='button' onClick={() => copyText(messageFormValue)}>
                   copy
-                </CopyAndPasteButton>
+                </CopyOrPasteButton>
               </PopupButton>
               <PopupButton popupMessage='pasted!'>
-                <CopyAndPasteButton type='button' onClick={() => pasteText(setEvaluatedMessageValue)}>
+                <CopyOrPasteButton type='button' onClick={() => pasteText(setMessageFormValue)}>
                   paste
-                </CopyAndPasteButton>
+                </CopyOrPasteButton>
               </PopupButton>
             </div>
-            <BaseTextarea className='h-[160px]' onChange={(e) => setMessageFormValue(e.target.value)} />
+            <BaseTextarea
+              className='h-[160px]'
+              onChange={(e) => setMessageFormValue(e.target.value)}
+              value={messageFormValue}
+            />
           </div>
           <div className='flex space-x-[8px]'>
             <label htmlFor='casualValue' className='whitespace-nowrap'>
               フォーマル度
             </label>
-            <BaseForm id='casualValue' onChange={casualValueHandler} className='w-[64px] border-2 border-gray-300' />
+            <BaseForm
+              id='casualValue'
+              onChange={casualValueHandler}
+              value={String(casualValue)}
+              className='w-[64px] border-2 border-gray-300'
+            />
             <Slider.Root
-              defaultValue={[casualValue]}
               className='relative flex items-center w-[200px] h-[20px]'
+              value={[casualValue]}
               onValueChange={(e) => setCasualValue(e[0])}
               max={100}
               step={1}
