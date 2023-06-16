@@ -10,8 +10,8 @@ import { GenerateButton } from '../../domain/GenerateButton/template';
 import { BaseTemplate } from '../../template/BaseTemplate';
 import { Mode, ModeSelect } from '../../template/ModeSelect';
 import { BaseTextarea } from '../../base/BaseTextarea';
-
-const CASUAL_VALUE = 70;
+import * as Slider from '@radix-ui/react-slider';
+import BaseForm from '../../base/BaseForm';
 
 const modeList: Mode[] = ['evaluate', 'translate'];
 
@@ -19,6 +19,7 @@ export const RootPage: NextPage = () => {
   const [evaluatedMessageValue, setEvaluatedMessageValue] = useState<string>('');
   const [messageFormValue, setMessageFormValue] = useState<string>('');
   const [currentMode, setCurrentMode] = useState<Mode>(modeList[0]);
+  const [casualValue, setCasualValue] = useState<number>(70);
 
   const {
     responseData: evaluateValue,
@@ -38,7 +39,7 @@ export const RootPage: NextPage = () => {
 
   const translatedBody: MessageTranslateRequestData = {
     message: messageFormValue,
-    casualValue: CASUAL_VALUE,
+    casualValue: casualValue,
   };
 
   const messageEvaluatedHandler = async () => {
@@ -49,6 +50,12 @@ export const RootPage: NextPage = () => {
   const messageGeneratingHandler = async () => {
     await postGeneratedMessage(translatedBody);
     return;
+  };
+
+  const casualValueHandler = (e: string) => {
+    if (!Number.isNaN(Number(e)) && Number(e) <= 100 && Number(e) >= 0) {
+      setCasualValue(Number(e));
+    }
   };
 
   return (
@@ -76,6 +83,24 @@ export const RootPage: NextPage = () => {
         <div className='space-y-[8px] flex items-center justify-center flex-col'>
           <div>{messageFormValue}</div>
           <BaseTextarea className='h-[160px]' onChange={(e) => setMessageFormValue(e.target.value)} />
+          <div className='flex space-x-[8px]'>
+            <label htmlFor='casualValue' className='whitespace-nowrap'>
+              フォーマル度
+            </label>
+            <BaseForm id='casualValue' onChange={casualValueHandler} className='w-[64px] border-2 border-gray-300' />
+            <Slider.Root
+              defaultValue={[casualValue]}
+              className='relative flex items-center w-[200px] h-[20px]'
+              onValueChange={(e) => setCasualValue(e[0])}
+              max={100}
+              step={1}
+            >
+              <Slider.Track className='relative flex-grow rounded-full h-[5px] bg-black'>
+                <Slider.Range className='absolute bg-blue-500 rounded-full h-full' />
+              </Slider.Track>
+              <Slider.Thumb className='block w-[20px] h-[20px] bg-blue-500 rounded-[10px] hover:bg-blue-600 focus:shadow-md' />
+            </Slider.Root>
+          </div>
           <GenerateButton type='button' onClick={() => messageGeneratingHandler()}>
             生成
           </GenerateButton>
@@ -84,7 +109,7 @@ export const RootPage: NextPage = () => {
           {!isGeneratingMessage && generatedMessage ? (
             <p className='border-2 border-gray-300 bg-white'>{generatedMessage.message}</p>
           ) : (
-            <p>この文章を?%くらいフォーマルにすると?</p>
+            <p>この文章を{casualValue}%くらいフォーマルにすると?</p>
           )}
         </div>
       )}
