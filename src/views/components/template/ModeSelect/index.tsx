@@ -11,12 +11,14 @@ type Props = {
   setCurrentMode: Dispatch<SetStateAction<Mode>>;
   modeList: Mode[];
   children?: ReactNode;
+  className?: string;
 };
 
-export const ModeSelect = ({ children, currentMode, setCurrentMode, modeList }: Props): JSX.Element => {
+export const ModeSelect = ({ children, currentMode, setCurrentMode, modeList, className }: Props): JSX.Element => {
+  const style = clsx(className, 'flex bg-red-400 text-white w-fit px-[32px] justify-center items-center');
   return (
     <Listbox value={currentMode} onChange={setCurrentMode}>
-      <Listbox.Button className='flex bg-red-400 text-white w-fit px-[32px] justify-center items-center'>
+      <Listbox.Button className={style}>
         <div className='font-bold text-[24px]'>{children}</div>
         <HiSelector className='w-[32px] h-[32px]' />
       </Listbox.Button>
