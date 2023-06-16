@@ -216,16 +216,16 @@ export const RootPage: NextPage = () => {
                   {generatedMessage
                     .substring(generatedMessage.indexOf('1'))
                     .split('2.')
-                    .map((generatedBio) => {
+                    .map((generatedText) => {
                       return (
-                        <PopupButton popupMessage='copied!' key={generatedBio}>
+                        <PopupButton popupMessage='copied!' key={generatedText}>
                           <button
                             className='bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border'
                             onClick={() => {
                               () => copyText(evaluatedMessageValue);
                             }}
                           >
-                            <p>{generatedBio}</p>
+                            <p>{generatedText}</p>
                           </button>
                         </PopupButton>
                       );
