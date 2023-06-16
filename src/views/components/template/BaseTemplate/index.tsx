@@ -5,7 +5,7 @@ export type Props = {
 };
 export const BaseTemplate: FC<Props> = (props) => {
   const { children } = props;
-  const style = ' p-8 bg-green-100';
+  const style = 'flex flex-1 w-full flex-col items-center justify-center text-center px-4';
 
   return <div className={style}>{children}</div>;
 };
