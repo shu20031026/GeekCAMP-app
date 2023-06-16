@@ -10,6 +10,7 @@ import { GenerateButton } from '../../domain/GenerateButton/template';
 import MessageForm from '../../domain/MessageForm';
 import { BaseTemplate } from '../../template/BaseTemplate';
 import { Mode, ModeSelect } from '../../template/ModeSelect';
+import { BaseTextarea } from '../../base/BaseTextarea';
 
 const CASUAL_VALUE = 70;
 
@@ -59,7 +60,7 @@ export const RootPage: NextPage = () => {
       {currentMode === 'evaluate' && (
         <div className='space-y-[8px] flex items-center justify-center flex-col'>
           <div>{evaluatedMessageValue}</div>
-          <MessageForm onChange={(e) => setEvaluatedMessageValue(e)} />
+          <BaseTextarea className='h-[160px]' />
           <GenerateButton type='button' onClick={() => messageEvaluatedHandler()}>
             評価
           </GenerateButton>
@@ -75,7 +76,7 @@ export const RootPage: NextPage = () => {
       {currentMode === 'translate' && (
         <div className='space-y-[8px] flex items-center justify-center flex-col'>
           <div>{messageFormValue}</div>
-          <MessageForm onChange={(e) => setMessageFormValue(e)} />
+          <BaseTextarea className='h-[160px]' />
           <GenerateButton type='button' onClick={() => messageGeneratingHandler()}>
             生成
           </GenerateButton>
