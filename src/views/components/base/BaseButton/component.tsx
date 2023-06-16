@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, forwardRef } from 'react';
 import BaseLink from '../BaseLink';
 export type ButtonType = 'submit' | 'reset' | 'button' | 'link';
 
@@ -33,7 +33,7 @@ export type BaseButtonProps = {
   children: ReactNode;
 } & (AsButtonProps | AsLinkProps | AsSubmitProps);
 
-export const BaseButton: FC<BaseButtonProps> = (props) => {
+export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>((props, forwardRef): JSX.Element => {
   const { id, children, className } = props;
 
   const style = clsx(baseStyle, className);
@@ -48,8 +48,10 @@ export const BaseButton: FC<BaseButtonProps> = (props) => {
   }
 
   return (
-    <button id={id} onClick={props.onClick} className={style}>
+    <button id={id} onClick={props.onClick} className={style} ref={forwardRef}>
       {children}
     </button>
   );
-};
+});
+
+BaseButton.displayName = 'BaseButton';
