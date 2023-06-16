@@ -14,8 +14,8 @@ import * as Slider from '@radix-ui/react-slider';
 import BaseForm from '../../base/BaseForm';
 import { CopyButton } from '../../domain/CopyButton';
 import { copyText } from '../../utils/copyText';
-import * as Popover from '@radix-ui/react-popover';
 import { PopupButton } from '../../template/PopupButton';
+import { pasteText } from '../../utils/pasteText';
 
 const modeList: Mode[] = ['evaluate', 'translate'];
 
@@ -71,11 +71,18 @@ export const RootPage: NextPage = () => {
         <div className='space-y-[8px] flex items-center justify-center flex-col'>
           <div>{evaluatedMessageValue}</div>
           <div className='w-full'>
-            <PopupButton popupMessage='copied!'>
-              <CopyButton type='button' onClick={() => copyText(evaluatedMessageValue)}>
-                copy
-              </CopyButton>
-            </PopupButton>
+            <div className='flex'>
+              <PopupButton popupMessage='copied!'>
+                <CopyButton type='button' onClick={() => copyText(evaluatedMessageValue)}>
+                  copy
+                </CopyButton>
+              </PopupButton>
+              <PopupButton popupMessage='pasted!'>
+                <CopyButton type='button' onClick={() => pasteText(setEvaluatedMessageValue)}>
+                  paste
+                </CopyButton>
+              </PopupButton>
+            </div>
             <BaseTextarea className='h-[160px]' onChange={(e) => setEvaluatedMessageValue(e.target.value)} />
           </div>
           <GenerateButton type='button' onClick={() => messageEvaluatedHandler()}>
@@ -93,7 +100,21 @@ export const RootPage: NextPage = () => {
       {currentMode === 'translate' && (
         <div className='space-y-[8px] flex items-center justify-center flex-col'>
           <div>{messageFormValue}</div>
-          <BaseTextarea className='h-[160px]' onChange={(e) => setMessageFormValue(e.target.value)} />
+          <div className='w-full'>
+            <div className='flex'>
+              <PopupButton popupMessage='copied!'>
+                <CopyButton type='button' onClick={() => copyText(evaluatedMessageValue)}>
+                  copy
+                </CopyButton>
+              </PopupButton>
+              <PopupButton popupMessage='pasted!'>
+                <CopyButton type='button' onClick={() => pasteText(setEvaluatedMessageValue)}>
+                  paste
+                </CopyButton>
+              </PopupButton>
+            </div>
+            <BaseTextarea className='h-[160px]' onChange={(e) => setMessageFormValue(e.target.value)} />
+          </div>
           <div className='flex space-x-[8px]'>
             <label htmlFor='casualValue' className='whitespace-nowrap'>
               フォーマル度
