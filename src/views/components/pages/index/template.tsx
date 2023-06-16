@@ -3,9 +3,6 @@ import { useState } from 'react';
 import { usePostApi } from '~/src/hooks/usePostApi';
 import MessageEvaluateRequestData from '~/src/server/interfaces/message/evaluate/POST/Request';
 import MessageEvaluateResponseData from '~/src/server/interfaces/message/evaluate/POST/Response';
-import MessageTranslateRequestData from '~/src/server/interfaces/message/translate/POST/Request';
-import MessageTranslateResponseData from '~/src/server/interfaces/message/translate/POST/Response';
-import { FaLongArrowAltDown } from 'react-icons/fa';
 import { GenerateButton } from '../../domain/GenerateButton/template';
 import { BaseTemplate } from '../../template/BaseTemplate';
 import { Mode, ModeSelect } from '../../template/ModeSelect';
@@ -25,7 +22,7 @@ export const RootPage: NextPage = () => {
   const [evaluatedMessageValue, setEvaluatedMessageValue] = useState<string>('');
   const [messageFormValue, setMessageFormValue] = useState<string>('');
   const [currentMode, setCurrentMode] = useState<Mode>(modeList[0]);
-  const [casualValue, setCasualValue] = useState<number>(70);
+  const [casualValue, setCasualValue] = useState<number>(50);
   const [loading, setLoading] = useState<boolean>(false);
   const [generatedMessage, setGeneratedMessage] = useState<string>('');
 
@@ -113,18 +110,6 @@ export const RootPage: NextPage = () => {
           <div className='space-y-[8px] flex items-center justify-center flex-col'>
             <div>{evaluatedMessageValue}</div>
             <div className='w-full'>
-              <div className='flex'>
-                <PopupButton popupMessage='copied!'>
-                  <CopyOrPasteButton type='button' onClick={() => copyText(evaluatedMessageValue)}>
-                    copy
-                  </CopyOrPasteButton>
-                </PopupButton>
-                <PopupButton popupMessage='pasted!'>
-                  <CopyOrPasteButton type='button' onClick={() => pasteText(setEvaluatedMessageValue)}>
-                    paste
-                  </CopyOrPasteButton>
-                </PopupButton>
-              </div>
               <BaseTextarea
                 className='h-[160px]'
                 onChange={(e) => setEvaluatedMessageValue(e.target.value)}
@@ -134,31 +119,14 @@ export const RootPage: NextPage = () => {
             <GenerateButton type='button' onClick={() => messageEvaluatedHandler()}>
               評価
             </GenerateButton>
-            <FaLongArrowAltDown className='w-[24px] h-[24px] text-red-500' />
             {isEvaluatingMessage && <ThreeDotsLoader />}
-            {!isEvaluatingMessage && evaluateValue ? (
-              <p>この文章のフォーマル度は{evaluateValue.casualValue}です</p>
-            ) : (
-              <p>この文章のフォーマル度は?</p>
-            )}
+            {!isEvaluatingMessage && evaluateValue && <p>この文章のフォーマル度は{evaluateValue.casualValue}です</p>}
           </div>
         )}
         {currentMode === 'translate' && (
           <div className='space-y-[8px] flex items-center justify-center flex-col'>
             <div>{messageFormValue}</div>
             <div className='w-full'>
-              <div className='flex'>
-                <PopupButton popupMessage='copied!'>
-                  <CopyOrPasteButton type='button' onClick={() => copyText(messageFormValue)}>
-                    copy
-                  </CopyOrPasteButton>
-                </PopupButton>
-                <PopupButton popupMessage='pasted!'>
-                  <CopyOrPasteButton type='button' onClick={() => pasteText(setMessageFormValue)}>
-                    paste
-                  </CopyOrPasteButton>
-                </PopupButton>
-              </div>
               <BaseTextarea
                 className='h-[160px]'
                 onChange={(e) => setMessageFormValue(e.target.value)}
