@@ -5,7 +5,7 @@ export const Test: FC = () => {
   const [loading, setLoading] = useState(false);
   const [generatedBios, setGeneratedBios] = useState<String>('');
 
-  const prompt = `次の文章をビジネスの場で使う想定で次の条件に従い最適な文体に変換してください。 条件:最大限フォーマルな場合を100%として90%程度で日本語で生成。「おはようございます！ いよいよ明日が本番ですね」`;
+  const prompt = `次の文章をビジネスの場で使う想定で変換してください。 条件:最大限フォーマルな場合を100%として90%程度で日本語で生成。「おはようございます！ いよいよ明日が本番ですね」`;
 
   const myRef = useRef<null | HTMLDivElement>(null);
 
