@@ -26,6 +26,47 @@ export const RootPage: NextPage = () => {
   const [messageFormValue, setMessageFormValue] = useState<string>('');
   const [currentMode, setCurrentMode] = useState<Mode>(modeList[0]);
   const [casualValue, setCasualValue] = useState<number>(70);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [generatedMessage, setGeneratedMessage] = useState<string>('');
+
+  const prompt = `次の文章をビジネスの場で使う想定でもう少しカジュアルに変換してください。 条件:最大限フォーマルな場合を100%として${casualValue}程度で。「${messageFormValue}」`;
+
+  // streamでメッセージを変換するハンドラ
+  const generateMessageHandler = async () => {
+    setGeneratedMessage('');
+    setLoading(true);
+    const response = await fetch('/api/message/stream/translate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt,
+      }),
+    });
+    console.log('Edge function returned.');
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      setGeneratedMessage((prev) => prev + chunkValue);
+    }
+    setLoading(false);
+  };
 
   const {
     responseData: evaluateValue,
@@ -33,28 +74,12 @@ export const RootPage: NextPage = () => {
     postApi: postEvaluatedMessage,
   } = usePostApi<MessageEvaluateResponseData, MessageEvaluateRequestData>('/api/message/evaluate');
 
-  const {
-    responseData: generatedMessage,
-    isLording: isGeneratingMessage,
-    postApi: postGeneratedMessage,
-  } = usePostApi<MessageTranslateResponseData, MessageTranslateRequestData>('/api/message/translate');
-
   const evaluatedBody: MessageEvaluateRequestData = {
     message: evaluatedMessageValue,
   };
 
-  const translatedBody: MessageTranslateRequestData = {
-    message: messageFormValue,
-    casualValue: casualValue,
-  };
-
   const messageEvaluatedHandler = async () => {
     await postEvaluatedMessage(evaluatedBody);
-    return;
-  };
-
-  const messageGeneratingHandler = async () => {
-    await postGeneratedMessage(translatedBody);
     return;
   };
 
@@ -79,6 +104,7 @@ export const RootPage: NextPage = () => {
           サイトをシェア↗︎
         </div>
       </header>
+
       <BaseTemplate>
         <ModeSelect currentMode={currentMode} setCurrentMode={setCurrentMode} modeList={modeList}>
           モードを変更する
@@ -162,22 +188,33 @@ export const RootPage: NextPage = () => {
                 <Slider.Thumb className='block w-[20px] h-[20px] bg-blue-500 rounded-[10px] hover:bg-blue-600 focus:shadow-md' />
               </Slider.Root>
             </div>
-            <GenerateButton type='button' onClick={() => messageGeneratingHandler()}>
+            <GenerateButton type='button' onClick={() => generateMessageHandler()}>
               生成
             </GenerateButton>
-            <FaLongArrowAltDown className='w-[24px] h-[24px] text-red-500' />
-            {isGeneratingMessage && <ThreeDotsLoader />}
-            {!isGeneratingMessage && generatedMessage ? (
-              <div>
-                <PopupButton popupMessage='copied!'>
-                  <CopyOrPasteButton type='button' onClick={() => copyText(generatedMessage.message)}>
-                    copy
-                  </CopyOrPasteButton>
-                </PopupButton>
-                <p className='border-2 border-gray-300 bg-white'>{generatedMessage.message}</p>
-              </div>
-            ) : (
-              <p>この文章を{casualValue}%くらいフォーマルにすると?</p>
+
+            {loading && <ThreeDotsLoader />}
+            {generatedMessage && (
+              <>
+                <div className='space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto'>
+                  {generatedMessage
+                    .substring(generatedMessage.indexOf('1'))
+                    .split('2.')
+                    .map((generatedBio) => {
+                      return (
+                        <PopupButton popupMessage='copied!' key={generatedBio}>
+                          <button
+                            className='bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border'
+                            onClick={() => {
+                              () => copyText(evaluatedMessageValue);
+                            }}
+                          >
+                            <p>{generatedBio}</p>
+                          </button>
+                        </PopupButton>
+                      );
+                    })}
+                </div>
+              </>
             )}
           </div>
         )}
