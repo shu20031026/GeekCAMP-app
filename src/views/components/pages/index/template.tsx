@@ -111,7 +111,7 @@ export const RootPage: NextPage = () => {
           <BaseButton
             type='button'
             onClick={() => setCurrentMode('translate')}
-            className='flex max-w-fit items-center justify-center space-x-2 rounded-full border border-red-300 bg-white px-4 py-2 text-sm text-red-600 shadow-md transition-colors hover:bg-red-400 hover:text-white  my-5'
+            className='flex max-w-fit items-center justify-center space-x-2 rounded-full border border-red-300 bg-white px-4 py-2 text-sm text-red-600 shadow-md transition-colors hover:bg-red-400 hover:text-white  mb-5'
           >
             生成モードに変更
           </BaseButton>
