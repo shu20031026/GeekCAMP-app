@@ -5,17 +5,16 @@ import MessageEvaluateRequestData from '~/src/server/interfaces/message/evaluate
 import MessageEvaluateResponseData from '~/src/server/interfaces/message/evaluate/POST/Response';
 import { GenerateButton } from '../../domain/GenerateButton/template';
 import { BaseTemplate } from '../../template/BaseTemplate';
-import { Mode, ModeSelect } from '../../template/ModeSelect';
+import { Mode } from '../../template/ModeSelect';
 import { BaseTextarea } from '../../base/BaseTextarea';
 import * as Slider from '@radix-ui/react-slider';
 import BaseForm from '../../base/BaseForm';
 import ThreeDotsLoader from '../../domain/ThreeDotsLoader';
 import { copyUrl } from '../../utils/CopyUrl';
-import { CopyOrPasteButton } from '../../domain/CopyOrPasteButton';
 import { copyText } from '../../utils/copyText';
 import { PopupButton } from '../../template/PopupButton';
-import { pasteText } from '../../utils/pasteText';
 import BaseButton from '../../base/BaseButton';
+import { useScrollToElement } from '~/src/hooks/useScrollToElement';
 
 const modeList: Mode[] = ['evaluate', 'translate'];
 
@@ -26,6 +25,8 @@ export const RootPage: NextPage = () => {
   const [casualValue, setCasualValue] = useState<number>(50);
   const [loading, setLoading] = useState<boolean>(false);
   const [generatedMessage, setGeneratedMessage] = useState<string>('');
+  const evaluateResultScroll = useScrollToElement<HTMLParagraphElement>();
+  const generatedResultScroll = useScrollToElement<HTMLButtonElement>();
 
   const prompt = `次の文章をビジネスの場で使う想定でもう少しカジュアルに変換してください。 条件:最大限フォーマルな場合を100%として${casualValue}程度で。「${messageFormValue}」`;
 
@@ -57,6 +58,8 @@ export const RootPage: NextPage = () => {
     const decoder = new TextDecoder();
     let done = false;
 
+    generatedResultScroll.scrollToElement();
+
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
@@ -80,6 +83,7 @@ export const RootPage: NextPage = () => {
     const res = await postEvaluatedMessage(evaluatedBody);
     if (res?.casualValue) {
       setCasualValue(res.casualValue);
+      evaluateResultScroll.scrollToElement();
     }
     return;
   };
@@ -165,7 +169,9 @@ export const RootPage: NextPage = () => {
                 {!isEvaluatingMessage ? <p>評価</p> : <ThreeDotsLoader />}
               </GenerateButton>
             </div>
-            {!isEvaluatingMessage && evaluateValue && <p>この文章のフォーマル度は{evaluateValue.casualValue}です</p>}
+            {!isEvaluatingMessage && evaluateValue && (
+              <p ref={evaluateResultScroll.scrollElementRef}>この文章のフォーマル度は{evaluateValue.casualValue}です</p>
+            )}
           </>
         )}
 
@@ -224,6 +230,7 @@ export const RootPage: NextPage = () => {
                             onClick={() => {
                               () => copyText(evaluatedMessageValue);
                             }}
+                            ref={generatedResultScroll.scrollElementRef}
                           >
                             <p>{generatedText}</p>
                           </button>
