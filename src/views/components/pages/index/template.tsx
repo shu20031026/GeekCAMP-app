@@ -58,14 +58,14 @@ export const RootPage: NextPage = () => {
     const decoder = new TextDecoder();
     let done = false;
 
-    generatedResultScroll.scrollToElement();
-
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
       setGeneratedMessage((prev) => prev + chunkValue);
     }
+
+    generatedResultScroll.scrollToElement();
     setLoading(false);
   };
 
