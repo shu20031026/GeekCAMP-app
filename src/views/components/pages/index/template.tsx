@@ -5,17 +5,16 @@ import MessageEvaluateRequestData from '~/src/server/interfaces/message/evaluate
 import MessageEvaluateResponseData from '~/src/server/interfaces/message/evaluate/POST/Response';
 import { GenerateButton } from '../../domain/GenerateButton/template';
 import { BaseTemplate } from '../../template/BaseTemplate';
-import { Mode, ModeSelect } from '../../template/ModeSelect';
+import { Mode } from '../../template/ModeSelect';
 import { BaseTextarea } from '../../base/BaseTextarea';
 import * as Slider from '@radix-ui/react-slider';
 import BaseForm from '../../base/BaseForm';
 import ThreeDotsLoader from '../../domain/ThreeDotsLoader';
 import { copyUrl } from '../../utils/CopyUrl';
-import { CopyOrPasteButton } from '../../domain/CopyOrPasteButton';
 import { copyText } from '../../utils/copyText';
 import { PopupButton } from '../../template/PopupButton';
-import { pasteText } from '../../utils/pasteText';
 import BaseButton from '../../base/BaseButton';
+import { useScrollToElement } from '~/src/hooks/useScrollToElement';
 
 const modeList: Mode[] = ['evaluate', 'translate'];
 
@@ -26,6 +25,8 @@ export const RootPage: NextPage = () => {
   const [casualValue, setCasualValue] = useState<number>(50);
   const [loading, setLoading] = useState<boolean>(false);
   const [generatedMessage, setGeneratedMessage] = useState<string>('');
+  const evaluateResultScroll = useScrollToElement<HTMLHeadingElement>();
+  const generatedResultScroll = useScrollToElement<HTMLButtonElement>();
 
   const prompt = `
                    # 命令: 
@@ -78,6 +79,8 @@ export const RootPage: NextPage = () => {
       const chunkValue = decoder.decode(value);
       setGeneratedMessage((prev) => prev + chunkValue);
     }
+
+    generatedResultScroll.scrollToElement();
     setLoading(false);
   };
 
@@ -96,6 +99,7 @@ export const RootPage: NextPage = () => {
     if (res?.casualValue) {
       setCasualValue(res.casualValue);
     }
+    setTimeout(() => evaluateResultScroll.scrollToElement(), 3000);
     return;
   };
 
@@ -158,7 +162,7 @@ export const RootPage: NextPage = () => {
               </GenerateButton>
 
               {!isEvaluatingMessage && evaluateValue && (
-                <h2 className='my-10 text-[20px]'>
+                <h2 ref={evaluateResultScroll.scrollElementRef} className='my-10 text-[20px]'>
                   この文章のフォーマル度は
                   <span className='text-[40px] font-bold px-1'>{evaluateValue.casualValue}%</span>
                   です
@@ -274,8 +278,9 @@ export const RootPage: NextPage = () => {
                             key={generatedText}
                             className='bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border'
                             onClick={() => {
-                              () => copyText(evaluatedMessageValue);
+                              copyText(generatedText);
                             }}
+                            ref={generatedResultScroll.scrollElementRef}
                           >
                             <p>{generatedText}</p>
                           </button>
