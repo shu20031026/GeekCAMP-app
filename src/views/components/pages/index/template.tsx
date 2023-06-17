@@ -121,120 +121,157 @@ export const RootPage: NextPage = () => {
           サイトをシェア↗︎
         </div>
       </header>
-      <div className='mt-[30px]'>
-        {currentMode === 'evaluate' ? (
-          <BaseButton
-            type='button'
-            onClick={() => setCurrentMode('translate')}
-            className='flex max-w-fit items-center justify-center space-x-2 rounded-full border border-red-300 bg-white px-4 py-2 text-sm text-red-600 shadow-md transition-colors hover:bg-red-400 hover:text-white  mb-5'
-          >
-            生成モードに変更
-          </BaseButton>
-        ) : (
-          <BaseButton
-            type='button'
-            onClick={() => setCurrentMode('evaluate')}
-            className='flex max-w-fit items-center justify-center space-x-2 rounded-full border border-red-300 bg-white px-4 py-2 text-sm text-red-600 shadow-md transition-colors hover:bg-red-400 hover:text-white  mb-5'
-          >
-            評価モードに変更
-          </BaseButton>
-        )}
-      </div>
-      <div>
-        <h1 className='text-[40px] font-extrabold mb-[20px]'>
+      <div className='pt-[20px]'>
+        <h1 className='text-[40px] font-extrabold my-[20px]'>
           <span className='text-[60px] text-green-700 font-bold'>ChatGPT </span>があなたのメッセージを
           <br />
           より良いものに変換します
         </h1>
-        <div className='max-w-xl w-full'>
-          <div className='flex w-full items-center my-[15px]'>
-            <div className='flex items-center justify-center w-[30px] h-[30px] mx-2 bg-red-400 rounded-full text-white'>
-              1
-            </div>
-            <div className='text-[22px] text-gray-700'>評価モードで会話のフォーマル度をチェック</div>
-          </div>
-          <div className='flex items-center w-full  my-[15px] '>
-            <div className='flex items-center justify-center w-[30px] h-[30px] mx-2 bg-red-400 rounded-full text-white'>
-              2
-            </div>
-            <p className='text-[22px] text-gray-700'>生成モードでメッセージを任意のフォーマル度に変換</p>
-          </div>
-        </div>
       </div>
 
       <BaseTemplate>
         {currentMode === 'evaluate' && (
           <>
             <div className='max-w-xl w-full'>
+              <div className='flex w-full items-center my-[15px]'>
+                <div className='text-[30px] text-red-400 font-bold mb-3'>使い方</div>
+              </div>
+              <div className='flex w-full items-center my-[15px]'>
+                <div className='flex items-center justify-center w-[30px] h-[30px] mx-2 bg-red-400 rounded-full text-white'>
+                  1
+                </div>
+                <div className='text-[22px] text-gray-900'>受信したメッセージのカジュアル度を評価</div>
+              </div>
+
               <BaseTextarea
-                className='w-full h-[160px] rounded-md border-red-300 shadow-sm focus:border-black focus:ring-black my-5'
+                className='w-full h-[160px] rounded-md border-red-300 shadow-sm focus:border-black focus:ring-black my-3'
                 onChange={(e) => setEvaluatedMessageValue(e.target.value)}
                 value={evaluatedMessageValue}
+                placeholder='カジュアル度を判定したいメッセージをここに入力してください'
               />
-
               <GenerateButton
                 type='button'
-                className='w-full h-[40px] rounded-full bg-red-400 text-white font-bold text-[20px]'
+                className='w-full h-[40px] rounded-full bg-red-400 text-white font-bold text-[20px] mb-14 hover:bg-red-500'
                 onClick={() => messageEvaluatedHandler()}
               >
                 {!isEvaluatingMessage ? <p>評価</p> : <ThreeDotsLoader />}
               </GenerateButton>
+
+              {!isEvaluatingMessage && evaluateValue && (
+                <h2 className='my-10 text-[20px]'>
+                  この文章のフォーマル度は
+                  <span className='text-[40px] font-bold px-1'>{evaluateValue.casualValue}%</span>
+                  です
+                </h2>
+              )}
+              <div className='flex w-full items-center my-[10px]'>
+                <div className='flex items-center justify-center w-[30px] h-[30px] mx-2 bg-red-400 rounded-full text-white'>
+                  2
+                </div>
+                <div className='text-[22px] text-gray-900'>
+                  送信したいメッセージのカジュアル度を
+                  <span onClick={() => setCurrentMode('translate')} className='text-gray-400 hover:text-red-400'>
+                    変換
+                  </span>
+                </div>
+              </div>
+              <div className='mt-[30px]'>
+                <GenerateButton
+                  type='button'
+                  className='mx-auto mb-4 w-3/5 h-[40px] rounded-full border border-red-300 bg-white text-red-600 font-bold text-[20px] hover:bg-red-400 hover:text-white '
+                  onClick={() => setCurrentMode('translate')}
+                >
+                  生成モードに移動
+                </GenerateButton>
+              </div>
             </div>
-            {!isEvaluatingMessage && evaluateValue && <p>この文章のフォーマル度は{evaluateValue.casualValue}です</p>}
           </>
         )}
 
         {currentMode === 'translate' && (
           <>
             <div className='max-w-xl w-full'>
+              <div className='flex w-full items-center my-[15px]'>
+                <div className='flex items-center justify-center w-[30px] h-[30px] mx-2 bg-red-400 rounded-full text-white'>
+                  1
+                </div>
+                <div className='text-[22px] text-gray-700'>送信するメッセージを入力</div>
+              </div>
+              {evaluatedMessageValue && (
+                <>
+                  <p className='mb-2 text-gray-500'>受信したメッセージ</p>
+                  <div className='flex mb-4'>
+                    <div className='w-[40px] min-w-[40px] h-[40px] rounded-full bg-gray-200'></div>
+
+                    <button>
+                      <div className='mx-[10px] py-[10px] px-[20px] rounded-tr-xl rounded-b-xl bg-slate-200 text-light hover:bg-slate-300 '>
+                        <div>{evaluatedMessageValue}</div>
+                      </div>
+                    </button>
+                  </div>
+                </>
+              )}
+              <p className='my-2 text-gray-500'>送信するメッセージ</p>
               <BaseTextarea
-                className='w-full h-[160px] rounded-md border-red-300 shadow-sm focus:border-black focus:ring-black my-5'
+                className='w-full h-[160px] rounded-md border-red-300 shadow-sm focus:border-black focus:ring-black mt-5 mb-12'
                 onChange={(e) => setMessageFormValue(e.target.value)}
                 value={messageFormValue}
+                placeholder='カジュアル度を変換したいメッセージをここに入力してください'
               />
-              <div className='flex flex-col items-center gap-2 mb-5'>
+
+              <div className='flex w-full items-center my-[15px]'>
+                <div className='flex items-center justify-center w-[30px] h-[30px] mx-2 bg-red-400 rounded-full text-white'>
+                  2
+                </div>
+                <div className='text-[22px] text-gray-700'>変換したいフォーマル度を設定</div>
+              </div>
+              <div className='flex items-center justify-between gap-4 my-[30px] px-20'>
                 <label htmlFor='casualValue' className='whitespace-nowrap'>
                   フォーマル度
                 </label>
+                <div>
+                  <div className='flex justify-between text-[8px]'>
+                    <p>0%</p>
+                    <p>100%</p>
+                  </div>
+                  <Slider.Root
+                    className='relative flex items-center w-[200px] h-[20px] text-[40px]'
+                    value={[casualValue]}
+                    onValueChange={(e) => setCasualValue(e[0])}
+                    max={100}
+                    step={1}
+                  >
+                    <Slider.Track className='relative flex-grow rounded-full h-[5px] bg-black'>
+                      <Slider.Range className='absolute bg-blue-500 rounded-full h-full' />
+                    </Slider.Track>
+                    <Slider.Thumb className='block w-[20px] h-[20px] bg-blue-500 rounded-[10px] hover:bg-blue-600 focus:shadow-md' />
+                  </Slider.Root>
+                </div>
                 <BaseForm
+                  type='number'
                   id='casualValue'
                   onChange={casualValueHandler}
                   value={String(casualValue)}
-                  className='w-[64px] border-2 border-gray-300'
+                  className='h-[50px] w-[100px] p-2 border-2 rounded-md border-gray-300'
                 />
-                <Slider.Root
-                  className='relative flex items-center w-[200px] h-[20px]'
-                  value={[casualValue]}
-                  onValueChange={(e) => setCasualValue(e[0])}
-                  max={100}
-                  step={1}
-                >
-                  <Slider.Track className='relative flex-grow rounded-full h-[5px] bg-black'>
-                    <Slider.Range className='absolute bg-blue-500 rounded-full h-full' />
-                  </Slider.Track>
-                  <Slider.Thumb className='block w-[20px] h-[20px] bg-blue-500 rounded-[10px] hover:bg-blue-600 focus:shadow-md' />
-                </Slider.Root>
               </div>
               <GenerateButton
-                className='w-full h-[40px] rounded-full bg-red-400 text-white font-bold text-[20px]'
+                className='w-full h-[40px] rounded-full bg-red-400 text-white font-bold text-[20px] mb-10'
                 type='button'
                 onClick={() => generateMessageHandler()}
               >
                 {!loading ? '生成' : <ThreeDotsLoader />}
               </GenerateButton>
-            </div>
-
-            {generatedMessage && (
-              <>
-                <div className='flex flex-col items-center justify-center max-w-xl mx-auto mb-10'>
-                  <h2 className='my-[40px] text-[30px] font-bold text-red-800'>次のメッセージはいかがでしょうか？</h2>
-                  {generatedMessage
-                    .substring(generatedMessage.indexOf('1'))
-                    .split('2.')
-                    .map((generatedText) => {
-                      return (
-                        <PopupButton popupMessage='copied!' key={generatedText}>
+              {generatedMessage && (
+                <>
+                  <div className='flex flex-col items-center justify-center max-w-xl mx-auto mb-10 py-4'>
+                    {generatedMessage
+                      .substring(generatedMessage.indexOf('1'))
+                      .split('2.')
+                      .map((generatedText) => {
+                        return (
                           <button
+                            key={generatedText}
                             className='bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border'
                             onClick={() => {
                               () => copyText(evaluatedMessageValue);
@@ -242,12 +279,21 @@ export const RootPage: NextPage = () => {
                           >
                             <p>{generatedText}</p>
                           </button>
-                        </PopupButton>
-                      );
-                    })}
-                </div>
-              </>
-            )}
+                        );
+                      })}
+                  </div>
+                </>
+              )}
+              <div className='mt-[30px]'>
+                <GenerateButton
+                  type='button'
+                  className='mx-auto mb-4 w-3/5 h-[40px] rounded-full border border-red-300 bg-white text-red-600 font-bold text-[20px] hover:bg-red-400 hover:text-white '
+                  onClick={() => setCurrentMode('evaluate')}
+                >
+                  評価モードに移動
+                </GenerateButton>
+              </div>
+            </div>
           </>
         )}
       </BaseTemplate>
