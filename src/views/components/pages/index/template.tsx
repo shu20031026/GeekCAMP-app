@@ -228,7 +228,7 @@ export const RootPage: NextPage = () => {
                           <button
                             className='bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border'
                             onClick={() => {
-                              () => copyText(evaluatedMessageValue);
+                              copyText(generatedText);
                             }}
                             ref={generatedResultScroll.scrollElementRef}
                           >
