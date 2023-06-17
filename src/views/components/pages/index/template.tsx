@@ -92,7 +92,7 @@ export const RootPage: NextPage = () => {
 
   return (
     <div className='flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen'>
-      <header className='flex items-center px-[20px] w-full h-[70px] text-red-400 font-bold border-b-2 border-red-200'>
+      <header className='grid grid-cols-3 items-center px-[20px] w-full h-[70px] text-red-400 font-bold border-b-2 border-red-200'>
         <div className='mr-auto'>
           <h1 className='text-[34px]'>ChatMaster</h1>
         </div>
