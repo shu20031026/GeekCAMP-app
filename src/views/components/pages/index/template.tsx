@@ -25,7 +25,7 @@ export const RootPage: NextPage = () => {
   const [casualValue, setCasualValue] = useState<number>(50);
   const [loading, setLoading] = useState<boolean>(false);
   const [generatedMessage, setGeneratedMessage] = useState<string>('');
-  const evaluateResultScroll = useScrollToElement<HTMLParagraphElement>();
+  const evaluateResultScroll = useScrollToElement<HTMLHeadingElement>();
   const generatedResultScroll = useScrollToElement<HTMLButtonElement>();
 
   const prompt = `
@@ -162,7 +162,7 @@ export const RootPage: NextPage = () => {
               </GenerateButton>
 
               {!isEvaluatingMessage && evaluateValue && (
-                <h2 className='my-10 text-[20px]'>
+                <h2 ref={evaluateResultScroll.scrollElementRef} className='my-10 text-[20px]'>
                   この文章のフォーマル度は
                   <span className='text-[40px] font-bold px-1'>{evaluateValue.casualValue}%</span>
                   です
@@ -189,9 +189,6 @@ export const RootPage: NextPage = () => {
                 </GenerateButton>
               </div>
             </div>
-            {!isEvaluatingMessage && evaluateValue && (
-              <p ref={evaluateResultScroll.scrollElementRef}>この文章のフォーマル度は{evaluateValue.casualValue}です</p>
-            )}
           </>
         )}
 
