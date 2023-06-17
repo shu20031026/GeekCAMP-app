@@ -98,8 +98,8 @@ export const RootPage: NextPage = () => {
     const res = await postEvaluatedMessage(evaluatedBody);
     if (res?.casualValue) {
       setCasualValue(res.casualValue);
-      evaluateResultScroll.scrollToElement();
     }
+    setTimeout(() => evaluateResultScroll.scrollToElement(), 3000);
     return;
   };
 
