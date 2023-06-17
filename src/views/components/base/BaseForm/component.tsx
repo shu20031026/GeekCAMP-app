@@ -11,14 +11,15 @@ export type BaseFormProps = {
   onChange?: (text: string) => void;
   placeholder?: string;
   disabled?: boolean;
+  type?: 'text' | 'number';
 };
 
 export const BaseForm: FC<BaseFormProps> = (props) => {
-  const { id, value, defaultValue, placeholder, disabled, onChange, className } = props;
+  const { id, value, defaultValue, placeholder, disabled, onChange, className, type = 'text' } = props;
   const style = clsx(baseStyle, className);
   return (
     <input
-      type='text'
+      type={type}
       id={id}
       value={value}
       defaultValue={defaultValue}
