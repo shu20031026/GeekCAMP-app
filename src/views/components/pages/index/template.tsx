@@ -92,7 +92,7 @@ export const RootPage: NextPage = () => {
 
   return (
     <div className='flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen'>
-      <header className='flex items-center px-[20px] w-full h-[70px] text-red-400 font-bold border-b-2 border-red-200'>
+      <header className='grid grid-cols-3 items-center px-[20px] w-full h-[70px] text-red-400 font-bold border-b-2 border-red-200'>
         <div className='mr-auto'>
           <h1 className='text-[34px]'>ChatMaster</h1>
         </div>
@@ -111,7 +111,7 @@ export const RootPage: NextPage = () => {
           <BaseButton
             type='button'
             onClick={() => setCurrentMode('translate')}
-            className='flex max-w-fit items-center justify-center space-x-2 rounded-full border border-red-300 bg-white px-4 py-2 text-sm text-red-600 shadow-md transition-colors hover:bg-red-400 hover:text-white  my-5'
+            className='flex max-w-fit items-center justify-center space-x-2 rounded-full border border-red-300 bg-white px-4 py-2 text-sm text-red-600 shadow-md transition-colors hover:bg-red-400 hover:text-white  mb-5'
           >
             生成モードに変更
           </BaseButton>
